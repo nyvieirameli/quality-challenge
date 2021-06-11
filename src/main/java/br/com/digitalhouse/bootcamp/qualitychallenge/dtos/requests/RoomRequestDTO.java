@@ -1,21 +1,22 @@
 package br.com.digitalhouse.bootcamp.qualitychallenge.dtos.requests;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 public class RoomRequestDTO {
 
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotBlank(message = "Review rooms names")
+    @Size(min = 3, max = 255, message = "The name must be between 3 and 255 chars")
     private String name;
 
-    @NotNull
-    @Positive
+    @NotNull(message = "Width can`t be null")
+    @Positive(message = "Width can`t be negative")
     private Double width;
 
-    @NotNull
-    @Positive
+    @NotNull(message = "Height can`t be null")
+    @Positive(message = "Height can't be negative")
     private Double height;
 
     public RoomRequestDTO() {

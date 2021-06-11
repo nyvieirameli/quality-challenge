@@ -1,18 +1,18 @@
 package br.com.digitalhouse.bootcamp.qualitychallenge.dtos.requests;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
 public class ClientRequestDTO {
 
-    @NotNull
-    @Size(min = 3, max = 255)
+    @NotBlank(message = "Review field name")
+    @Size(min = 3, max = 255, message = "The name must be between 3 and 255 chars")
     private String name;
 
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotBlank(message = "Review field neighborhood")
+    @Size(min = 3, max = 255, message = "The neighborhood must be between 1 and 255 chars")
     private String neighborhood;
 
     @Valid

@@ -5,83 +5,79 @@ import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.requests.RoomRequestDT
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.ClientResponseDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.ResponseDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.RoomResponseDTO;
-import br.com.digitalhouse.bootcamp.qualitychallenge.exceptions.BadRequestException;
+import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.mapper.RoomResponseMapper;
+import br.com.digitalhouse.bootcamp.qualitychallenge.utils.exceptions.BadRequestException;
+import br.com.digitalhouse.bootcamp.qualitychallenge.utils.helper.Helper;
 import br.com.digitalhouse.bootcamp.qualitychallenge.services.interfaces.CalculatorService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class CalculatorServiceImpl implements CalculatorService {
 
     @Override
-    public ResponseDTO<ClientResponseDTO> calculateClientRequest(ClientRequestDTO request) {
-        validateRequest(request);
-
+    public ClientResponseDTO calculateClientRequest(ClientRequestDTO request) {
         var totalArea = calculateTotalArea(request.getRooms());
 
-        var clientResponse = new ClientResponseDTO(
+        return new ClientResponseDTO(
                 request.getName(),
                 request.getNeighborhood(),
                 totalArea,
-                calculatePrice(totalArea),
+                Helper.calculatePrice(totalArea),
                 calculateRoomsArea(request.getRooms()));
-
-        return new ResponseDTO(clientResponse);
     }
 
-    public void validateRequest(ClientRequestDTO request) {
-        if (request == null) {
-            throw new BadRequestException("Body can't be null");
-        }
-
-        if (request.getName().isBlank() || request.getNeighborhood().isBlank()) {
-            throw new BadRequestException("Review name and/or neighborhood fields");
-        }
-
-        if (request.getRooms() == null || request.getRooms().size() == 0) {
-            throw new BadRequestException("Rooms list can`t be empty");
-        }
-    }
-
+    @Override
     public Double calculateTotalArea(List<RoomRequestDTO> rooms) {
+        Helper.validateList(rooms);
+
         return rooms.stream()
-                .mapToDouble(r -> calculateArea(r.getWidth(), r.getHeight()))
+                .mapToDouble(r -> Helper.calculateArea(r.getWidth(), r.getHeight()))
                 .reduce(0, Double::sum);
     }
 
+    @Override
     public List<RoomResponseDTO> calculateRoomsArea(List<RoomRequestDTO> rooms) {
-        var roomsResponse = new ArrayList<RoomResponseDTO>();
+        validateRoomd(rooms);
 
-        for (var room : rooms) {
-            var area = calculateArea(room.getWidth(), room.getHeight());
+        var responseList = RoomResponseMapper.fromRoomRequestList(rooms);
 
-            roomsResponse.add(new RoomResponseDTO(
-                    room.getName(),
-                    area,
-                    calculatePrice(area))
-            );
-        }
+        Collections.sort(responseList);
 
-        return roomsResponse;
+        return responseList;
     }
 
-    public Double calculateArea(Double width, Double height) {
-        if (width > 0 && height > 0) {
+    @Override
+    public Double calculateTotalPrice(List<RoomRequestDTO> rooms) {
+        validateRoomd(rooms);
 
-            return width * height;
-        }
-
-        throw new BadRequestException("Width and Height must be positive values");
+        return null;
     }
 
-    public Double calculatePrice(Double area) {
-        if (area > 0) {
+    @Override
+    public List<RoomResponseDTO> calculateRoomsPrice(List<RoomRequestDTO> rooms) {
+        validateRoomd(rooms);
 
-            return 0.0;
+        return null;
+    }
+
+    @Override
+    public RoomResponseDTO getTheBiggestRoom(List<RoomRequestDTO> rooms) {
+        validateRoomd(rooms);
+
+        var responseList = RoomResponseMapper.fromRoomRequestList(rooms);
+
+        return Collections.max(responseList);
+    }
+
+    private void validateRoomd(List<RoomRequestDTO> rooms) {
+        Helper.validateList(rooms);
+
+        var roomWIthoutName = rooms.stream().filter(r -> r.getName().isBlank()).findFirst().isPresent();
+        if (roomWIthoutName) {
+            throw new BadRequestException("All rooms must have name");
         }
-
-        throw new BadRequestException("Price can`t be calculate");
     }
 }

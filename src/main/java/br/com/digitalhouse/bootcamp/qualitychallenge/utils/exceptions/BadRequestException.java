@@ -1,4 +1,4 @@
-package br.com.digitalhouse.bootcamp.qualitychallenge.exceptions;
+package br.com.digitalhouse.bootcamp.qualitychallenge.utils.exceptions;
 
 public class BadRequestException extends RuntimeException{
 

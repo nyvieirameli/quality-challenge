@@ -1,9 +1,11 @@
 package br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses;
 
-public class RoomResponseDTO {
+public class RoomResponseDTO implements Comparable<RoomResponseDTO> {
 
     private String name;
+
     private Double area;
+
     private Double price;
 
     public RoomResponseDTO(String name, Double area, Double price) {
@@ -26,5 +28,10 @@ public class RoomResponseDTO {
 
     public void setArea(Double area) {
         this.area = area;
+    }
+
+    @Override
+    public int compareTo(RoomResponseDTO room) {
+        return this.area.compareTo(room.getArea());
     }
 }

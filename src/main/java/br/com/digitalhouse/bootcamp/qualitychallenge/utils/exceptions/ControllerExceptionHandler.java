@@ -1,4 +1,4 @@
-package br.com.digitalhouse.bootcamp.qualitychallenge.exceptions;
+package br.com.digitalhouse.bootcamp.qualitychallenge.utils.exceptions;
 
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.ResponseDTO;
 import org.springframework.http.HttpHeaders;
