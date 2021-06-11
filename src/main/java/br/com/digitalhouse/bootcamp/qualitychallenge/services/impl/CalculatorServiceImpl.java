@@ -38,7 +38,7 @@ public class CalculatorServiceImpl implements CalculatorService {
 
     @Override
     public Double calculateTotalArea(List<RoomRequestDTO> rooms) {
-        Helper.validateList(rooms);
+        validateRooms(rooms);
 
         return rooms.stream()
                 .mapToDouble(r -> Helper.calculateArea(r.getWidth(), r.getHeight()))
@@ -47,7 +47,7 @@ public class CalculatorServiceImpl implements CalculatorService {
 
     @Override
     public Double calculateTotalPrice(List<RoomRequestDTO> rooms, String neighborhood) {
-        validateRoomd(rooms);
+        validateRooms(rooms);
 
         var areaPrice = repository.getAreaPriceByName(neighborhood);
 
@@ -60,7 +60,7 @@ public class CalculatorServiceImpl implements CalculatorService {
 
     @Override
     public List<RoomResponseDTO> calculateRoomsResponse(List<RoomRequestDTO> rooms, String neighborhood) {
-        validateRoomd(rooms);
+        validateRooms(rooms);
 
         var areaPrice = repository.getAreaPriceByName(neighborhood);
 
@@ -73,7 +73,7 @@ public class CalculatorServiceImpl implements CalculatorService {
 
     @Override
     public RoomResponseDTO getTheBiggestRoom(List<RoomRequestDTO> rooms, String neighborhood) {
-        validateRoomd(rooms);
+        validateRooms(rooms);
 
         var areaPrice = repository.getAreaPriceByName(neighborhood);
 
@@ -82,7 +82,7 @@ public class CalculatorServiceImpl implements CalculatorService {
         return Collections.max(responseList);
     }
 
-    private void validateRoomd(List<RoomRequestDTO> rooms) {
+    private void validateRooms(List<RoomRequestDTO> rooms) {
         Helper.validateList(rooms);
 
         if (rooms.stream().anyMatch(r -> r.getName().isBlank())) {
