@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 public interface RoomResponseMapper {
 
-    static List<RoomResponseDTO> fromRoomRequestList(List<RoomRequestDTO> roomRequestDTOS) {
-        return roomRequestDTOS.stream().map(RoomResponseMapper::fromRoomRequestDTO).collect(Collectors.toList());
+    static List<RoomResponseDTO> fromRoomRequestList(List<RoomRequestDTO> roomRequestDTOS, Double areaPrice) {
+        return roomRequestDTOS.stream().map(r -> fromRoomRequestDTO(r, areaPrice)).collect(Collectors.toList());
     }
 
-    static RoomResponseDTO fromRoomRequestDTO(RoomRequestDTO room) {
+    static RoomResponseDTO fromRoomRequestDTO(RoomRequestDTO room, Double areaPrice) {
         var area = Helper.calculateArea(room.getWidth(), room.getHeight());
 
-        return new RoomResponseDTO(room.getName(), area, Helper.calculatePrice(area));
+        return new RoomResponseDTO(room.getName(), area, Helper.calculatePrice(area, areaPrice));
     }
 }

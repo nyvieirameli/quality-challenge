@@ -30,6 +30,14 @@ public class RoomResponseDTO implements Comparable<RoomResponseDTO> {
         this.area = area;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     @Override
     public int compareTo(RoomResponseDTO room) {
         return this.area.compareTo(room.getArea());

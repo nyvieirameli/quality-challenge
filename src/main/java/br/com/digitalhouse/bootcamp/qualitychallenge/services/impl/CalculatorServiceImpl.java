@@ -6,6 +6,7 @@ import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.ClientRespon
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.ResponseDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.RoomResponseDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.mapper.RoomResponseMapper;
+import br.com.digitalhouse.bootcamp.qualitychallenge.repositories.interfaces.NeighborhoodRepository;
 import br.com.digitalhouse.bootcamp.qualitychallenge.utils.exceptions.BadRequestException;
 import br.com.digitalhouse.bootcamp.qualitychallenge.utils.helper.Helper;
 import br.com.digitalhouse.bootcamp.qualitychallenge.services.interfaces.CalculatorService;
@@ -17,6 +18,12 @@ import java.util.List;
 @Service
 public class CalculatorServiceImpl implements CalculatorService {
 
+    NeighborhoodRepository repository;
+
+    public CalculatorServiceImpl(NeighborhoodRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public ClientResponseDTO calculateClientRequest(ClientRequestDTO request) {
         var totalArea = calculateTotalArea(request.getRooms());
@@ -25,8 +32,8 @@ public class CalculatorServiceImpl implements CalculatorService {
                 request.getName(),
                 request.getNeighborhood(),
                 totalArea,
-                Helper.calculatePrice(totalArea),
-                calculateRoomsArea(request.getRooms()));
+                calculateTotalPrice(request.getRooms(), request.getNeighborhood()),
+                calculateRoomsResponse(request.getRooms(), request.getNeighborhood()));
     }
 
     @Override
@@ -39,10 +46,25 @@ public class CalculatorServiceImpl implements CalculatorService {
     }
 
     @Override
-    public List<RoomResponseDTO> calculateRoomsArea(List<RoomRequestDTO> rooms) {
+    public Double calculateTotalPrice(List<RoomRequestDTO> rooms, String neighborhood) {
         validateRoomd(rooms);
 
-        var responseList = RoomResponseMapper.fromRoomRequestList(rooms);
+        var areaPrice = repository.getAreaPriceByName(neighborhood);
+
+        return rooms.stream()
+                .mapToDouble(r ->
+                    Helper.calculatePrice(Helper.calculateArea(r.getWidth(), r.getHeight()), areaPrice)
+                )
+                .reduce(0, Double::sum);
+    }
+
+    @Override
+    public List<RoomResponseDTO> calculateRoomsResponse(List<RoomRequestDTO> rooms, String neighborhood) {
+        validateRoomd(rooms);
+
+        var areaPrice = repository.getAreaPriceByName(neighborhood);
+
+        var responseList = RoomResponseMapper.fromRoomRequestList(rooms, areaPrice);
 
         Collections.sort(responseList);
 
@@ -50,24 +72,12 @@ public class CalculatorServiceImpl implements CalculatorService {
     }
 
     @Override
-    public Double calculateTotalPrice(List<RoomRequestDTO> rooms) {
+    public RoomResponseDTO getTheBiggestRoom(List<RoomRequestDTO> rooms, String neighborhood) {
         validateRoomd(rooms);
 
-        return null;
-    }
+        var areaPrice = repository.getAreaPriceByName(neighborhood);
 
-    @Override
-    public List<RoomResponseDTO> calculateRoomsPrice(List<RoomRequestDTO> rooms) {
-        validateRoomd(rooms);
-
-        return null;
-    }
-
-    @Override
-    public RoomResponseDTO getTheBiggestRoom(List<RoomRequestDTO> rooms) {
-        validateRoomd(rooms);
-
-        var responseList = RoomResponseMapper.fromRoomRequestList(rooms);
+        var responseList = RoomResponseMapper.fromRoomRequestList(rooms, areaPrice);
 
         return Collections.max(responseList);
     }
@@ -75,8 +85,7 @@ public class CalculatorServiceImpl implements CalculatorService {
     private void validateRoomd(List<RoomRequestDTO> rooms) {
         Helper.validateList(rooms);
 
-        var roomWIthoutName = rooms.stream().filter(r -> r.getName().isBlank()).findFirst().isPresent();
-        if (roomWIthoutName) {
+        if (rooms.stream().anyMatch(r -> r.getName().isBlank())) {
             throw new BadRequestException("All rooms must have name");
         }
     }

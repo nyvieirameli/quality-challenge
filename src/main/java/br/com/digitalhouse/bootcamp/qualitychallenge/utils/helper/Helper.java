@@ -2,6 +2,7 @@ package br.com.digitalhouse.bootcamp.qualitychallenge.utils.helper;
 
 import br.com.digitalhouse.bootcamp.qualitychallenge.utils.exceptions.BadRequestException;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class Helper {
@@ -9,16 +10,18 @@ public class Helper {
     public static Double calculateArea(Double width, Double height) {
         if (width > 0 && height > 0) {
 
-            return width * height;
+            var numberFomated = new DecimalFormat("0.00").format((width * height));
+            return Double.parseDouble(numberFomated);
         }
 
         throw new BadRequestException("Width and Height must be positive values");
     }
 
-    public static Double calculatePrice(Double area) {
-        if (area > 0) {
+    public static Double calculatePrice(Double area, Double areaPrice) {
+        if (area > 0 && areaPrice > 0) {
 
-            return 0.0;
+            var numberFomated = new DecimalFormat("0.00").format((area * areaPrice));
+            return Double.parseDouble(numberFomated);
         }
 
         throw new BadRequestException("Price can`t be calculate");

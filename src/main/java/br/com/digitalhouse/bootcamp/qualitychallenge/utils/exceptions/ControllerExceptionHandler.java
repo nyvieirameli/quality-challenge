@@ -38,6 +38,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return ExceptionResponse(new ResponseDTO(HttpStatus.BAD_GATEWAY, e.getMessage()));
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ResponseDTO> genericError(Exception e, HttpServletRequest request) {
+
+        return ExceptionResponse(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, e.toString()));
+    }
+
     private ResponseEntity<ResponseDTO> ExceptionResponse(ResponseDTO err) {
         return ResponseEntity.status(err.getHttpStatus()).body(err);
     }

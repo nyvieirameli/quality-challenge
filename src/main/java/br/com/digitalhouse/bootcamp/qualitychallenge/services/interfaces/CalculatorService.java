@@ -11,8 +11,7 @@ public interface CalculatorService {
 
     ClientResponseDTO calculateClientRequest(ClientRequestDTO request);
     Double calculateTotalArea(List<RoomRequestDTO> rooms);
-    List<RoomResponseDTO> calculateRoomsArea(List<RoomRequestDTO> rooms);
-    Double calculateTotalPrice(List<RoomRequestDTO> rooms);
-    List<RoomResponseDTO> calculateRoomsPrice(List<RoomRequestDTO> rooms);
-    RoomResponseDTO getTheBiggestRoom(List<RoomRequestDTO> rooms);
+    Double calculateTotalPrice(List<RoomRequestDTO> rooms, String neighborhood);
+    List<RoomResponseDTO> calculateRoomsResponse(List<RoomRequestDTO> rooms, String neighborhood);
+    RoomResponseDTO getTheBiggestRoom(List<RoomRequestDTO> rooms, String neighborhood);
 }

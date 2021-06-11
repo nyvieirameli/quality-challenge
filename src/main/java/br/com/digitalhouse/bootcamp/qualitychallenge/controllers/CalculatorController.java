@@ -2,7 +2,9 @@ package br.com.digitalhouse.bootcamp.qualitychallenge.controllers;
 
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.requests.ClientRequestDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.requests.RoomRequestDTO;
+import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.ClientResponseDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.ResponseDTO;
+import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.RoomResponseDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.services.interfaces.CalculatorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,43 +27,36 @@ public class CalculatorController {
     }
 
     @PostMapping("/area")
-    public ResponseEntity calculateArea(@Valid @RequestBody ClientRequestDTO clientRequest) {
+    public ResponseEntity<ResponseDTO<ClientResponseDTO>> calculateArea(@Valid @RequestBody ClientRequestDTO clientRequest) {
         var response = service.calculateClientRequest(clientRequest);
 
         return new ResponseEntity(new ResponseDTO(response), HttpStatus.OK);
     }
 
     @PostMapping("/total-area")
-    public ResponseEntity calculateTotalArea(@Valid @RequestBody List<RoomRequestDTO> roomRequestList) {
-        var response = service.calculateTotalArea(roomRequestList);
-
-        return new ResponseEntity(new ResponseDTO(response), HttpStatus.OK);
-    }
-
-    @PostMapping("/rooms-area")
-    public ResponseEntity calculateRoomsArea(@Valid @RequestBody List<RoomRequestDTO> roomRequestList) {
-        var response = service.calculateRoomsArea(roomRequestList);
+    public ResponseEntity<ResponseDTO<Double>> calculateTotalArea(@Valid @RequestBody ClientRequestDTO clientRequest) {
+        var response = service.calculateTotalArea(clientRequest.getRooms());
 
         return new ResponseEntity(new ResponseDTO(response), HttpStatus.OK);
     }
 
     @PostMapping("/total-price")
-    public ResponseEntity calculateTotalPrice(@Valid @RequestBody List<RoomRequestDTO> roomRequestList) {
-        var response = service.calculateTotalPrice(roomRequestList);
+    public ResponseEntity<ResponseDTO<Double>> calculateTotalPrice(@Valid @RequestBody ClientRequestDTO clientRequest) {
+        var response = service.calculateTotalPrice(clientRequest.getRooms(), clientRequest.getNeighborhood());
 
         return new ResponseEntity(new ResponseDTO(response), HttpStatus.OK);
     }
 
-    @PostMapping("/rooms-price")
-    public ResponseEntity calculateRoomsPrice(@Valid @RequestBody List<RoomRequestDTO> roomRequestList) {
-        var response = service.calculateRoomsPrice(roomRequestList);
+    @PostMapping("/rooms")
+    public ResponseEntity<ResponseDTO<List<RoomResponseDTO>>> calculateRooms(@Valid @RequestBody ClientRequestDTO clientRequest) {
+        var response = service.calculateRoomsResponse(clientRequest.getRooms(), clientRequest.getNeighborhood());
 
         return new ResponseEntity(new ResponseDTO(response), HttpStatus.OK);
     }
 
     @PostMapping("/biggestRoom")
-    public ResponseEntity calculateBiggestRoom(@Valid @RequestBody List<RoomRequestDTO> roomRequestList) {
-        var response = service.getTheBiggestRoom(roomRequestList);
+    public ResponseEntity<ResponseDTO<RoomResponseDTO>> calculateBiggestRoom(@Valid @RequestBody ClientRequestDTO clientRequest) {
+        var response = service.getTheBiggestRoom(clientRequest.getRooms(), clientRequest.getNeighborhood());
 
         return new ResponseEntity(new ResponseDTO(response), HttpStatus.OK);
     }
