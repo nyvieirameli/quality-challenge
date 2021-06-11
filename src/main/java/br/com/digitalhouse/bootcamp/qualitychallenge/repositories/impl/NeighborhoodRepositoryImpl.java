@@ -6,7 +6,6 @@ import br.com.digitalhouse.bootcamp.qualitychallenge.utils.exceptions.NotFoundEx
 import br.com.digitalhouse.bootcamp.qualitychallenge.utils.helper.Helper;
 import br.com.digitalhouse.bootcamp.qualitychallenge.utils.helper.JsonHelper;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,14 +22,16 @@ public class NeighborhoodRepositoryImpl implements NeighborhoodRepository {
 
     @Override
     public List<NeighborhoodDTO> getAllList() {
-        return jsonHelper.getJsonObject();
+        var list = jsonHelper.getJsonObject();
+
+        Helper.validateList(list);
+
+        return list;
     }
 
     @Override
     public NeighborhoodDTO getByName(String name) {
-        var list = getAllList();
-
-        var optional = list.stream()
+        var optional = getAllList().stream()
                 .filter(x -> x.getName().equals(name))
                 .findFirst();
 
@@ -43,8 +44,6 @@ public class NeighborhoodRepositoryImpl implements NeighborhoodRepository {
 
     @Override
     public Double getAreaPriceByName(String name) {
-        var neighborhood = getByName(name);
-
-        return neighborhood.getAreaPrice();
+        return getByName(name).getAreaPrice();
     }
 }
