@@ -27,9 +27,15 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ResponseDTO> dataIntegrity(BadRequestException e, HttpServletRequest request) {
+    public ResponseEntity<ResponseDTO> badRequest(BadRequestException e, HttpServletRequest request) {
 
         return ExceptionResponse(new ResponseDTO(HttpStatus.BAD_REQUEST, e.getMessage()));
+    }
+
+    @ExceptionHandler(RepositoryNotAvaliableException.class)
+    public ResponseEntity<ResponseDTO> repositoryNotAvaliable(BadRequestException e, HttpServletRequest request) {
+
+        return ExceptionResponse(new ResponseDTO(HttpStatus.BAD_GATEWAY, e.getMessage()));
     }
 
     private ResponseEntity<ResponseDTO> ExceptionResponse(ResponseDTO err) {
