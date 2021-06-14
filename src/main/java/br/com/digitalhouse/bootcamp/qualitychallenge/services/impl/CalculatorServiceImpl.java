@@ -3,7 +3,6 @@ package br.com.digitalhouse.bootcamp.qualitychallenge.services.impl;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.requests.ClientRequestDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.requests.RoomRequestDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.ClientResponseDTO;
-import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.ResponseDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.RoomResponseDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.mapper.RoomResponseMapper;
 import br.com.digitalhouse.bootcamp.qualitychallenge.repositories.interfaces.NeighborhoodRepository;

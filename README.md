@@ -1,6 +1,23 @@
 # quality-challenge
 Desafio Quality seguindo o acrônimo SOLID no módulo sobre testes e qualidade de software no Bootcamp MeLi
 
+## Como rodar o projeto
+1. Clonar o projeto
+```
+git@github.com:nyvieirameli/quality-challenge.git
+```
+2. Rodar o projeto pelo IntelliJ IDEA.
+
+## Documentação completa
+Para uma visão de todas as chamadas disponíveis para uso, acesse a documentação completa através do link: https://documenter.getpostman.com/view/15849644/TzeUn8Pi
+
+## Collection de exemplo
+Uma collection do postman está disponível para aulixiar em teste e em exemplos.
+Para cloná-la, vá ao site https://www.postman.com/ ou abra seu aplicativo e importe o seguinte link:
+```
+https://www.getpostman.com/collections/75751f56f60507922b0f
+```
+
 ## Use Cases
 
 ### Todas as USs
@@ -431,6 +448,10 @@ Exemplo de Json de Retorno Em Caso De Erro 404:
   "data": null
 }
 ````
+
+## Testes integrados
+
+Os testes integrados foram feitos baseados em retornos corretos (OK ou 200) na classe CalculatorServiceImplSprintTest, pois ele possui integração com o NeighborhoodRepository
 
 ## Testes unitários
 
