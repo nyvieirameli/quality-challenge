@@ -26,6 +26,10 @@ public class CalculatorServiceImpl implements CalculatorService {
 
     @Override
     public ClientResponseDTO calculateClientRequest(ClientRequestDTO request) {
+        if (!Character.isUpperCase(request.getName().charAt(0))) {
+            throw new BadRequestException("The property name must start with uppercase char");
+        }
+
         var totalArea = calculateTotalArea(request.getRooms());
 
         return new ClientResponseDTO(
@@ -87,6 +91,14 @@ public class CalculatorServiceImpl implements CalculatorService {
 
         if (rooms.stream().anyMatch(r -> r.getName().isBlank())) {
             throw new BadRequestException("All rooms must have name");
+        }
+
+        if (rooms.stream().anyMatch(r -> !Character.isUpperCase(r.getName().charAt(0)))) {
+            throw new BadRequestException("All rooms name must start with uppercase char");
+        }
+
+        if (rooms.stream().anyMatch(r -> r.getWidth() > 25 || r.getHeight() > 33)) {
+            throw new BadRequestException("The biggest size for a room is 25m of width and 33 of height");
         }
     }
 }

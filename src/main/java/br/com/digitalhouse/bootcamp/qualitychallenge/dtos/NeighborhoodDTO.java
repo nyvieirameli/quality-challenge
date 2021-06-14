@@ -29,4 +29,12 @@ public class NeighborhoodDTO {
     public void setAreaPrice(Double areaPrice) {
         this.areaPrice = areaPrice;
     }
+
+    @Override
+    public String toString() {
+        return "NeighborhoodDTO{" +
+                "name='" + name + '\'' +
+                ", areaPrice=" + areaPrice +
+                '}';
+    }
 }

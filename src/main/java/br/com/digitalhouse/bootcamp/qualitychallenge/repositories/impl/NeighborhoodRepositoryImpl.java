@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class NeighborhoodRepositoryImpl implements NeighborhoodRepository {
@@ -32,7 +33,7 @@ public class NeighborhoodRepositoryImpl implements NeighborhoodRepository {
     @Override
     public NeighborhoodDTO getByName(String name) {
         var optional = getAllList().stream()
-                .filter(x -> x.getName().equals(name))
+                .filter(x -> x.getName().toLowerCase(Locale.ROOT).equals(name.toLowerCase(Locale.ROOT)))
                 .findFirst();
 
         if (optional.isEmpty()) {

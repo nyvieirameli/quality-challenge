@@ -6,6 +6,7 @@ import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.ClientRespon
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.ResponseDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.dtos.responses.RoomResponseDTO;
 import br.com.digitalhouse.bootcamp.qualitychallenge.services.interfaces.CalculatorService;
+import br.com.digitalhouse.bootcamp.qualitychallenge.utils.exceptions.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +36,10 @@ public class CalculatorController {
 
     @PostMapping("/total-area")
     public ResponseEntity<ResponseDTO<Double>> calculateTotalArea(@Valid @RequestBody ClientRequestDTO clientRequest) {
+        if (!Character.isUpperCase(clientRequest.getName().charAt(0))) {
+            throw new BadRequestException("The property name must start with uppercase char");
+        }
+
         var response = service.calculateTotalArea(clientRequest.getRooms());
 
         return new ResponseEntity(new ResponseDTO(response), HttpStatus.OK);
@@ -42,6 +47,10 @@ public class CalculatorController {
 
     @PostMapping("/total-price")
     public ResponseEntity<ResponseDTO<Double>> calculateTotalPrice(@Valid @RequestBody ClientRequestDTO clientRequest) {
+        if (!Character.isUpperCase(clientRequest.getName().charAt(0))) {
+            throw new BadRequestException("The property name must start with uppercase char");
+        }
+
         var response = service.calculateTotalPrice(clientRequest.getRooms(), clientRequest.getNeighborhood());
 
         return new ResponseEntity(new ResponseDTO(response), HttpStatus.OK);
@@ -49,6 +58,10 @@ public class CalculatorController {
 
     @PostMapping("/rooms")
     public ResponseEntity<ResponseDTO<List<RoomResponseDTO>>> calculateRooms(@Valid @RequestBody ClientRequestDTO clientRequest) {
+        if (!Character.isUpperCase(clientRequest.getName().charAt(0))) {
+            throw new BadRequestException("The property name must start with uppercase char");
+        }
+
         var response = service.calculateRoomsResponse(clientRequest.getRooms(), clientRequest.getNeighborhood());
 
         return new ResponseEntity(new ResponseDTO(response), HttpStatus.OK);
@@ -56,6 +69,10 @@ public class CalculatorController {
 
     @PostMapping("/biggestRoom")
     public ResponseEntity<ResponseDTO<RoomResponseDTO>> calculateBiggestRoom(@Valid @RequestBody ClientRequestDTO clientRequest) {
+        if (!Character.isUpperCase(clientRequest.getName().charAt(0))) {
+            throw new BadRequestException("The property name must start with uppercase char");
+        }
+
         var response = service.getTheBiggestRoom(clientRequest.getRooms(), clientRequest.getNeighborhood());
 
         return new ResponseEntity(new ResponseDTO(response), HttpStatus.OK);

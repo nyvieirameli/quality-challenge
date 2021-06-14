@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ClientRequestDTO {
 
-    @NotBlank(message = "Review field name")
-    @Size(min = 3, max = 255, message = "The name must be between 3 and 255 chars")
+    @NotBlank(message = "The property name can't be null or empty")
+    @Size(min = 3, max = 30, message = "The name must be between 3 and 30 characters")
     private String name;
 
-    @NotBlank(message = "Review field neighborhood")
-    @Size(min = 3, max = 255, message = "The neighborhood must be between 1 and 255 chars")
+    @NotBlank(message = "The property neighborhood can't be null or empty")
+    @Size(min = 3, max = 45, message = "The neighborhood must be between 1 and 45 characters")
     private String neighborhood;
 
     @Valid

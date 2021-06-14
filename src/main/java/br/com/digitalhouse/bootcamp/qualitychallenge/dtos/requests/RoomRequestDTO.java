@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 public class RoomRequestDTO {
 
     @NotBlank(message = "Review rooms names")
-    @Size(min = 3, max = 255, message = "The name must be between 3 and 255 chars")
+    @Size(min = 3, max = 30, message = "The room name must be between 3 and 30 characters")
     private String name;
 
     @NotNull(message = "Width can`t be null")

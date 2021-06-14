@@ -49,14 +49,14 @@ public class CalculatorServiceImplTest {
     }
 
     @Test
-    public void shouldCalculateClientRequestWithNullBody() {
+    public void shouldThrowNullPointerExceptionWithClientRequestWithNullBody() {
         Assertions.assertThrows(NullPointerException.class, () -> {
             service.calculateClientRequest(null);
         });
     }
 
     @Test
-    public void shouldCalculateClientRequestWithNullValues() {
+    public void shouldThrowNullPointerExceptionWithClientRequestWithNullValues() {
         var roomsRequest = createRoomsRequest(null, null, null, null);
         var request = createClienteRequest(null, null, roomsRequest);
 
@@ -66,7 +66,7 @@ public class CalculatorServiceImplTest {
     }
 
     @Test
-    public void shouldCalculateClientRequestWithEmptyList() {
+    public void shouldThrowBadPointerExceptionWithClientRequestWithEmptyList() {
         var request = createClienteRequest("Nycolas Vieira", "Veloso", new ArrayList<>());
 
         Assertions.assertThrows(BadRequestException.class, () -> {
@@ -75,13 +75,57 @@ public class CalculatorServiceImplTest {
     }
 
     @Test
-    public void shouldCalculateClientRequestWithZeroValues() {
+    public void shouldThrowBadPointerExceptionWithClientRequestWithZeroValues() {
         var roomsRequest = createRoomsRequest("Quintal1", "Quintal2", 0.0, 0.0);
         var request = createClienteRequest("Nycolas Vieira", "Veloso", roomsRequest);
 
         Assertions.assertThrows(BadRequestException.class, () -> {
             service.calculateClientRequest(request);
         });
+    }
+
+    @Test
+    public void shouldCalculateTotalAreaCorrectly() {
+        var responseExpected = 200.0;
+
+        var roomsRequest = createRoomsRequest("Quintal1", "Quintal2", 10.0, 10.0);
+        var response = service.calculateTotalArea(roomsRequest);
+
+        assertThat(response).isEqualTo(responseExpected);
+    }
+
+    @Test
+    public void shouldCalculateRoomsRequestCorrectly() {
+        var responseExpected = createExpectedRoomsResponse();
+
+        when(repository.getAreaPriceByName("Veloso")).thenReturn(3000.00);
+
+        var roomsRequest = createRoomsRequest("Quintal1", "Quintal2", 10.0, 10.0);
+        var response = service.calculateRoomsResponse(roomsRequest, "Veloso");
+
+        verify(repository, atLeast(1)).getAreaPriceByName("Veloso");
+
+        assertThat(response.toString()).isEqualTo(responseExpected.toString());
+    }
+
+    @Test
+    public void shouldGetBiggestRoomCorrectly() {
+        var responseExpected = new RoomResponseDTO("Quintal2", 100.0, 300000.0);
+
+        when(repository.getAreaPriceByName("Veloso")).thenReturn(3000.00);
+
+        var roomsRequest = new ArrayList<>(
+                Arrays.asList(
+                        new RoomRequestDTO("Quintal1", 5.0, 5.0),
+                        new RoomRequestDTO("Quintal2", 10.0, 10.0),
+                        new RoomRequestDTO("Quintal3", 7.0, 7.0)
+                )
+        );
+        var response = service.getTheBiggestRoom(roomsRequest, "Veloso");
+
+        verify(repository, atLeast(1)).getAreaPriceByName("Veloso");
+
+        assertThat(response.toString()).isEqualTo(responseExpected.toString());
     }
 
     private ClientRequestDTO createClienteRequest(String name, String neighborhood, List<RoomRequestDTO> rooms) {
@@ -113,5 +157,4 @@ public class CalculatorServiceImplTest {
         );
         return roomsExpected;
     }
-
 }
