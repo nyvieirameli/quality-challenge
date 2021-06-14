@@ -42,4 +42,13 @@ public class RoomResponseDTO implements Comparable<RoomResponseDTO> {
     public int compareTo(RoomResponseDTO room) {
         return this.area.compareTo(room.getArea());
     }
+
+    @Override
+    public String toString() {
+        return "RoomResponseDTO{" +
+                "name='" + name + '\'' +
+                ", area=" + area +
+                ", price=" + price +
+                '}';
+    }
 }

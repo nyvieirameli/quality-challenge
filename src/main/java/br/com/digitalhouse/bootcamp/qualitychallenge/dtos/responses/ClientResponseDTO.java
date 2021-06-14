@@ -75,4 +75,16 @@ public class ClientResponseDTO {
     public void setRooms(List<RoomResponseDTO> rooms) {
         this.rooms = rooms;
     }
+
+    @Override
+    public String toString() {
+        return "ClientResponseDTO{" +
+                "name='" + name + '\'' +
+                ", neighborhood='" + neighborhood + '\'' +
+                ", totalArea=" + totalArea +
+                ", totalPrice=" + totalPrice +
+                ", roomsQuantity=" + roomsQuantity +
+                ", rooms=" + rooms +
+                '}';
+    }
 }
